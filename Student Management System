@@ -1,0 +1,83 @@
+import sqlite3
+
+# Connect to the SQLite database
+conn = sqlite3.connect('students.db')
+c = conn.cursor()
+
+# Create a table for storing student information
+c.execute('''
+    CREATE TABLE IF NOT EXISTS students (
+        id INTEGER PRIMARY KEY,
+        name TEXT NOT NULL,
+        age INTEGER NOT NULL,
+        grade TEXT NOT NULL
+    )
+''')
+conn.commit()
+
+def add_student(id,name, age, grade):
+    c.execute('INSERT INTO students (id,name, age, grade) VALUES(1,Anbu, 20, A+)')
+    c.execute('INSERT INTO students (id,name, age, grade) VALUES(2,Tarun, 18, B)')
+    c.execute('INSERT INTO students (id,name,age, grade) VALUES(3,Harsih, 19, C)')
+    c.execute('INSERT INTO students (id,name,age, grade) VALUES(4,Vinoth, 21, B)')
+    c.execute('INSERT INTO students (id,name,age, grade) VALUES(5,Kishore, 20, D)')
+	
+    conn.commit()
+
+def view_students():
+    c.execute('SELECT * FROM students')
+    rows = c.fetchall()
+    for row in rows:
+        print(row)
+
+def update_student(id, name, age, grade):
+    c.execute('UPDATE students SET name = Manoj, age = 21, grade = A+ WHERE id = 3', (id,name, age, grade,))
+    conn.commit()
+
+def delete_student(id):
+    c.execute('DELETE FROM students WHERE id = 4', (id,))
+    conn.commit()
+
+def main():
+    while True:
+        print("\nStudent Database Management")
+        print("1. Add student")
+        print("2. View students")
+        print("3. Update student")
+        print("4. Delete student")
+        print("5. Exit")
+
+        choice = input("Enter your choice: ")
+
+        if choice == '1':
+	        id = int(input("Enter student's id: "))	
+	        name = input("Enter student's name: ")
+	        age = int(input("Enter student's age: "))
+	        grade = input("Enter student's grade: ")
+	        add_student(id,name, age, grade)
+	        print("Student added successfully.")
+        elif choice == '2':
+            print("Student List:")
+            view_students()
+        elif choice == '3':
+            id = int(input("Enter student's ID to update: "))
+            name = input("Enter new name: ")
+            age = int(input("Enter new age: "))
+            grade = input("Enter new grade: ")
+            update_student(id, name, age, grade)
+            print("Student updated successfully.")
+        elif choice == '4':
+            id = int(input("Enter student's ID to delete: "))
+            delete_student(id)
+            print("Student deleted successfully.")
+        elif choice == '5':
+            print("Exiting...")
+            break
+        else:
+            print("Invalid choice, please try again.")
+
+    # Close the database connection
+    conn.close()
+
+if __name__ == "__main__":
+    main()
